@@ -1,0 +1,33 @@
+{
+  "name": "spriteforge",
+  "version": "1.0.0",
+  "description": "Generate game sprites using OpenAI's image generation API",
+  "type": "module",
+  "scripts": {
+    "start": "NODE_ENV=production node server.js",
+    "dev": "concurrently \"npm run server\" \"npm run tailwind\"",
+    "server": "nodemon server.js",
+    "tailwind": "tailwindcss -i ./styles/input.css -o ./styles/output.css --watch",
+    "build": "tailwindcss -i ./styles/input.css -o ./styles/output.css --minify",
+    "postinstall": "npm run build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d ."
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "http-server": "^14.1.1",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.28.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^8.2.2",
+    "gh-pages": "^6.3.0",
+    "nodemon": "^3.0.3",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17"
+  }
+}

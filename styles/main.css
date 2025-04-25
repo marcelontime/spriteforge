@@ -1,0 +1,30 @@
+/* Custom component styles */
+.btn-primary {
+  @apply bg-indigo-600 text-white rounded-lg py-2 font-semibold w-full disabled:opacity-40;
+}
+
+.btn-secondary {
+  @apply bg-emerald-600 text-white rounded-lg py-2 font-semibold disabled:opacity-40;
+}
+
+.form-group {
+  @apply flex flex-col gap-1;
+}
+
+/* Style grid items */
+.style-option {
+  @apply border rounded-lg overflow-hidden focus:ring-4 focus:ring-indigo-300;
+}
+
+.style-option.selected {
+  @apply ring-4 ring-indigo-500;
+}
+
+.style-option img {
+  @apply w-full;
+}
+
+/* Action result */
+.action-sprite {
+  @apply w-full border rounded-lg;
+} 

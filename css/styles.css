@@ -1,0 +1,192 @@
+.loading-spinner-small {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #e5e7eb;
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+} 
+
+/* Style Cards */
+.style-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.style-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.style-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.style-card.selected {
+  border-color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.style-card-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.style-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.style-card:hover .style-card-image img {
+  transform: scale(1.05);
+}
+
+.style-card-content {
+  padding: 1.5rem;
+}
+
+.style-card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.style-card-description {
+  color: #cccccc;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.style-card-specs {
+  color: #999999;
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+  font-family: monospace;
+}
+
+.style-card-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.feature-tag {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  transition: background 0.3s ease;
+}
+
+.style-card:hover .feature-tag {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.style-card.selected .feature-tag {
+  background: rgba(76, 175, 80, 0.2);
+}
+
+/* Grid Layout */
+.step-panel[data-step="2"] {
+  @apply min-h-screen;
+}
+
+#stylesGrid {
+  @apply container mx-auto;
+}
+
+/* Button Styles */
+.btn {
+  @apply px-6 py-2 rounded-lg font-medium transition-colors duration-200;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-secondary {
+  @apply bg-gray-700 text-white hover:bg-gray-600;
+}
+
+/* Step Panels - with higher specificity and !important */
+main > .step-panel,
+.step-panel,
+section.step-panel,
+main section.step-panel {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+}
+
+main > .step-panel.is-active,
+.step-panel.is-active,
+section.step-panel.is-active,
+main section.step-panel.is-active,
+#upload.is-active,
+section#upload.is-active,
+main section#upload.is-active {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Overrides for any other styles */
+.hidden.step-panel.is-active,
+.step-panel.hidden.is-active,
+main > .step-panel.hidden.is-active,
+.step-panel[style*="display: none"].is-active,
+.step-panel[style*="visibility: hidden"].is-active {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  height: auto !important;
+  overflow: visible !important;
+  z-index: 100 !important;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+} 
+
+/* Visibility overrides with the highest possible specificity */
+html body main section#upload[data-step="1"],
+body section#upload[data-step="1"],
+#upload[data-step="1"],
+section#upload[data-step="1"],
+html body section[data-step="1"].is-active,
+main section[data-step="1"].is-active,
+[data-step="1"].step-panel.is-active {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  position: relative !important;
+  z-index: 9999 !important;
+} 
