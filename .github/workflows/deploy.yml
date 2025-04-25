@@ -34,12 +34,15 @@ jobs:
         run: |
           npm install --no-package-lock --no-audit
           npm install -g postcss-cli
+        continue-on-error: false
       - name: Build
         run: npm run build
+        continue-on-error: false
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./
+          retention-days: 1
 
   # Deployment job
   deploy:
@@ -51,4 +54,6 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4 
+        uses: actions/deploy-pages@v4
+        with:
+          timeout: 600000 # 10 minutes 
