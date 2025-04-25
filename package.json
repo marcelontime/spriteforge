@@ -28,6 +28,10 @@
     "gh-pages": "^6.3.0",
     "nodemon": "^3.0.3",
     "postcss": "^8.5.3",
+    "postcss-cli": "^10.1.0",
     "tailwindcss": "^3.4.17"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
