@@ -4,7 +4,7 @@
   "description": "Generate game sprites using OpenAI's image generation API",
   "type": "module",
   "scripts": {
-    "start": "NODE_ENV=production node server.js",
+    "start": "node server.js",
     "dev": "concurrently \"npm run server\" \"npm run tailwind\"",
     "server": "nodemon server.js",
     "tailwind": "tailwindcss -i ./styles/input.css -o ./styles/output.css --watch",
