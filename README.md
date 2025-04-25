@@ -1,49 +1,127 @@
-# Sprite Maker
+# SpriteForge
 
-Generate game sprites from photos using OpenAI's image generation API.
+<div align="center">
+  <img src="./media/spriteforge.png" alt="SpriteForge Logo" width="300px" />
+  <p><em>Generate professional game sprites from photos using OpenAI's GPT-Image-1 model</em></p>
+</div>
 
-## Features
+## 🎮 Overview
 
-- Upload a full-body photo
-- Generate sprites in 3 different styles:
-  - 8-bit Retro (Mario Bros style)
-  - Arcade Fighter (Street Fighter style)
-  - Modern Cartoon (Mobile game style)
-- Generate different actions for your character:
-  - Idle stance
-  - Walking animation
-  - Jumping poses
-  - Punching moves
-  - Kicking moves
+SpriteForge is a web application that transforms regular photos into game-ready character sprites using OpenAI's GPT-Image-1 model. Whether you're a game developer looking for quick character assets or just someone who wants to see themselves as a video game character, SpriteForge makes it easy to generate high-quality sprites in various popular game styles.
 
-## Setup
+## ✨ Features
 
-1. Install dependencies:
-```bash
-npm install
-```
+- **Multiple Game Styles**: Generate sprites in various popular game styles:
+  - Stardew Valley (32×32 pixelart)
+  - Breath of the Wild (256×256 cel-shaded)
+  - Genshin Impact (192×192 anime-styled)
+  - Hollow Knight (128×128 hand-drawn gothic)
+  - Fall Guys (160×160 bouncy cartoon)
+  - Original style based on your reference image
 
-2. Start the development server:
-```bash
-npm start
-```
+- **Animation Actions**: Create multiple animation sequences for your character:
+  - Idle animation
+  - Walk cycle
+  - Jump animation
+  - Air attack
+  - Hurt animation
+  - Knockout animation
+  - Punch combinations
+  - Turn around animation
 
-3. Open your browser to the URL shown in the terminal (usually http://localhost:8080)
+- **Real-time Preview**: Watch animations come to life with our built-in animation player
+- **Frame Editing**: Edit and regenerate individual frames for perfect animations
+- **Direct API Integration**: Uses your own OpenAI API key for image generation
 
-4. Enter your OpenAI API key (get one from https://platform.openai.com/api-keys)
+## 🖼️ Example Output
 
-## Usage
+<div align="center">
+  <img src="./media/placeholder.jpeg" alt="Example Sprite Sheet" width="600px" />
+  <p><em>Example sprite sheet generated with SpriteForge</em></p>
+</div>
 
-1. Select your preferred model (DALL·E 2 or GPT-Image 1)
-2. Enter your OpenAI API key
-3. Upload a full-body photo
-4. Click "Generate 3 Sprite Styles"
-5. Select your preferred style
-6. Choose an action to generate
+## 🚀 Getting Started
 
-## Notes
+### Prerequisites
 
-- The API key is stored in your browser's localStorage
-- Images are processed directly in your browser
-- No data is stored on any server
-- GPT-Image 1 requires organization verification from OpenAI 
+- Node.js (v16+)
+- npm or yarn
+- OpenAI API key with access to GPT-Image-1 model
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/spriteforge.git
+   cd spriteforge
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Build the styles:
+   ```bash
+   npm run build
+   ```
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Open your browser to http://localhost:8080
+
+## 🎮 How to Use
+
+1. **Enter your OpenAI API key** (required for image generation)
+2. **Upload a reference photo** (preferably a full-body image with a clear subject)
+3. **Generate Style Previews** to see your character in different game styles
+4. **Select your preferred style** from the generated options
+5. **Choose an animation action** from the dropdown menu
+6. **Generate your sprite frames** and watch them animate in real-time
+7. **Edit individual frames** if needed by clicking on them
+8. **Download your completed sprite sheet** for use in your games!
+
+## 🛠️ Technical Details
+
+### Technology Stack
+
+- **Frontend**: HTML5, CSS3, JavaScript, Tailwind CSS
+- **API Integration**: OpenAI GPT-Image-1 model
+- **Build Tools**: PostCSS, Nodemon, Concurrently
+- **Deployment**: GitHub Pages
+
+### API Usage Notes
+
+- This application uses OpenAI's GPT-Image-1 model which requires an API key
+- API calls are made directly from your browser to OpenAI
+- Your API key is stored in localStorage for convenience but never sent to our servers
+- Image generation costs will be charged to your OpenAI account
+
+## 🔒 Privacy
+
+- Your uploaded images are processed entirely in your browser
+- No data is transmitted to any server except directly to OpenAI's API
+- Your OpenAI API key is stored locally and only used to authenticate with OpenAI
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgements
+
+- OpenAI for providing the image generation API
+- All the game art styles that inspired this project
+- Contributors who have helped improve this tool 

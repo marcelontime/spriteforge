@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-900 scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpriteForge - Generate Game Sprites with AI</title>
+    <meta name="description" content="Transform photos into game-ready character sprites using OpenAI's GPT-Image-1 model">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" href="styles/output.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <!-- Simple initialization script -->
+    <script>
+      // Initialize with clean step handling
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM loaded - initializing wizard');
+      });
+    </script>
+    <style>
+      body {
+        background: linear-gradient(to bottom, #111827, #0f172a);
+      }
+      
+      .step-circle {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: #1e293b;
+        color: #9ca3af;
+        transition: all 0.3s ease;
+      }
+      
+      .step-circle.active {
+        background-color: var(--primary-color);
+        color: #111827;
+      }
+      
+      .step-circle.completed {
+        background-color: rgba(var(--primary-rgb), 0.2);
+        color: var(--primary-color);
+      }
+      
+      .step-line {
+        flex-grow: 1;
+        height: 2px;
+        background-color: #1e293b;
+        margin: 0 8px;
+      }
+      
+      .step-line.active {
+        background-color: var(--primary-color);
+      }
+      
+      .style-card {
+        border: 2px solid rgba(255, 166, 41, 0.3);
+        transition: all 0.2s ease;
+        background-color: #1e293b;
+        overflow: hidden;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        height: 100%;
+      }
+      
+      .style-card:hover {
+        border-color: rgba(255, 166, 41, 0.8);
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+      
+      .style-card.selected, .style-option.selected {
+        border-color: #FFA629;
+        box-shadow: 0 0 0 2px #FFA629;
+      }
+      
+      /* Simple Step Panel Visibility Control */
+      .step-panel {
+        display: none;
+      }
+      
+      .step-panel.is-active {
+        display: block;
+      }
+      
+      /* Custom animations */
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .fade-in {
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+      
+      /* Image preview styles */
+      #imagePreview {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1rem 0;
+      }
+      
+      #imagePreview.hidden {
+        display: none;
+      }
+      
+      #previewImage {
+        max-width: 100%;
+        max-height: 200px;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        object-fit: contain;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+      
+      #previewImage:hover {
+        transform: scale(1.05);
+      }
+      
+      :root {
+        --primary-color: #FFA629;
+        --primary-rgb: 255, 166, 41;
+        --secondary-color: #8E44FD;
+        --secondary-rgb: 142, 68, 253;
+      }
+      
+      /* Button Styles */
+      .btn-primary {
+        background-color: var(--primary-color);
+        color: #111827;
+        font-weight: 500;
+        border-radius: 0.375rem;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .btn-primary:hover {
+        background-color: #e69423;
+        transform: translateY(-1px);
+      }
+      
+      .btn-primary:disabled {
+        background-color: #6b7280;
+        cursor: not-allowed;
+        transform: none;
+      }
+      
+      .btn-secondary {
+        background-color: rgba(var(--secondary-rgb), 0.15);
+        color: var(--secondary-color);
+        font-weight: 500;
+        border-radius: 0.375rem;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .btn-secondary:hover {
+        background-color: rgba(var(--secondary-rgb), 0.25);
+      }
+      
+      .form-input {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background-color: #1e293b;
+        border: 1px solid #374151;
+        border-radius: 0.375rem;
+        color: #e5e7eb;
+        font-size: 0.875rem;
+        transition: border-color 0.2s;
+      }
+      
+      .form-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.25);
+      }
+      
+      .form-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: #9ca3af;
+      }
+      
+      /* Style Grid */
+      .style-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+        min-height: 200px;
+      }
+      
+      /* Selection Summary Styles */
+      .selection-summary {
+        background: linear-gradient(to right, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8));
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+      }
+      
+      .selection-summary-item {
+        position: relative;
+        transition: transform 0.2s ease;
+      }
+      
+      .selection-summary-item:hover {
+        transform: translateY(-2px);
+      }
+      
+      .selection-summary-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 0.375rem;
+        overflow: hidden;
+        background-color: rgba(17, 24, 39, 0.7);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+      
+      .selection-summary-image img {
+        object-fit: contain;
+        width: 100%;
+        height: 100%;
+      }
+      
+      .selection-summary-image.uploaded {
+        border-color: rgba(var(--primary-rgb), 0.5);
+      }
+      
+      .selection-summary-image.selected {
+        border-color: rgba(var(--secondary-rgb), 0.5);
+      }
+    </style>
+  </head>
+  <body class="h-full text-gray-100 antialiased">
+    <!-- Simple helper functions -->
+    <script>
+      // Show image in modal
+      window.showImageModal = function(src) {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        if (modal && modalImage) {
+          modalImage.src = src;
+          modal.classList.remove('hidden');
+        }
+      };
+      
+      // Load API key on page load
+      window.addEventListener('load', function() {
+        const apiKey = document.getElementById('apiKey');
+        if (apiKey && localStorage.getItem('openai_api_key')) {
+          apiKey.value = localStorage.getItem('openai_api_key');
+          console.log('API key loaded from localStorage');
+        }
+      });
+    </script>
+    
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+      <!-- Main header -->
+      <header class="text-center mb-12 pt-8">
+        <h1 class="text-4xl sm:text-6xl font-extrabold mb-6 text-white">
+          Turn any picture into<br />
+          <span class="text-primary">game-ready sprites</span>
+        </h1>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <!-- Buttons removed -->
+        </div>
+      </header>
+      
+      <!-- Step indicator - progression tracker -->
+      <div class="flex items-center justify-center mb-12 max-w-sm mx-auto" id="stepper">
+        <div class="step flex items-center" data-step="1">
+          <div class="step-circle active flex items-center justify-center w-8 h-8 rounded-full bg-primary text-gray-900 text-sm font-medium">1</div>
+          <div class="ml-2 mr-auto text-sm font-medium text-primary">Upload</div>
+        </div>
+        
+        <div class="h-0.5 w-20 bg-gray-800 mx-3 step-line"></div>
+        
+        <div class="step flex items-center" data-step="2">
+          <div class="step-circle flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 text-gray-400 text-sm font-medium">2</div>
+          <div class="ml-2 text-sm font-medium text-gray-400">Actions</div>
+        </div>
+      </div>
+      
+      <!-- Main content -->
+      <main class="relative">
+        <!-- STEP 1 – Upload -->
+        <section data-step="1" class="step-panel is-active" id="upload">
+          <!-- Top action navigation -->
+          <div class="flex items-center justify-between mb-8">
+            <!-- Buttons removed -->
+          </div>
+          
+          <!-- Upload and Preview Section -->
+          <div class="flex flex-col md:flex-row gap-6 mb-6">
+            <!-- Left side - Upload area -->
+            <div class="w-full md:w-1/2 border-2 border-dashed border-gray-700 rounded-lg p-4 flex flex-col items-center justify-center min-h-[200px]">
+              <div class="text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mb-4 text-gray-600 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <p class="text-gray-400 mb-4">Drag & drop an image,</p>
+                <button id="chooseFileBtn" type="button" class="btn-secondary px-6 py-2">Choose file</button>
+                <input type="file" id="imageUpload" class="hidden" accept="image/*" capture="false" />
+              </div>
+              
+              <div id="imagePreview" class="mt-4 w-full flex items-center justify-center hidden">
+                <img id="previewImage" class="max-h-48 max-w-full rounded shadow cursor-zoom-in object-contain" alt="Preview" onclick="showImageModal(this.src)" />
+              </div>
+            </div>
+            
+            <!-- Right side - Selected style preview -->
+            <div class="w-full md:w-1/2 bg-gray-800/30 border border-gray-700 rounded-lg p-4 flex flex-col items-center justify-center">
+              <div id="selectedStyleContainer" class="text-center">
+                <img id="selectedStyleImage" class="max-h-48 mx-auto mb-4" alt="Selected style" src="media/style_previews/hollow_knight.png" />
+                <h3 id="selectedStyleName" class="text-lg font-semibold mb-1">Hollow Knight</h3>
+                <p class="text-gray-400 text-sm">128×128 hand-drawn gothic style</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- API Key (moved below the upload) -->
+          <div class="mb-8">
+            <form id="apiKeyForm" onsubmit="event.preventDefault();" autocomplete="off">
+              <input type="text" id="apiUsername" name="username" style="display: none;" autocomplete="username" value="openai" />
+              <label for="apiKey" class="form-label">OpenAI API Key</label>
+              <input type="password" id="apiKey" name="apiKey" class="form-input" placeholder="sk-..." autocomplete="new-password" data-lpignore="true" />
+            </form>
+          </div>
+          
+          <!-- Style Grid -->
+          <div class="mb-8">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="stylesGrid">
+              <!-- Style options will be added dynamically -->
+            </div>
+          </div>
+          
+          <!-- Navigation -->
+          <div class="flex justify-end">
+            <button id="toStep2" class="btn-primary px-8 py-3" disabled>Next →</button>
+          </div>
+        </section>
+        
+        <!-- STEP 2 – Style - Skip this in the new interface -->
+        <section data-step="2" class="step-panel" id="style">
+          <!-- Top action navigation -->
+          <div class="flex items-center justify-between mb-8">
+            <button type="button" class="btn-secondary px-6 py-3 rounded-md" data-back="1">← Back to Upload</button>
+          </div>
+          
+          <!-- Selected Style Preview and Image -->
+          <div class="flex flex-col md:flex-row gap-6 mb-6">
+            <!-- Left side - Styled Image Preview -->
+            <div class="w-full md:w-1/2 bg-gray-800/30 border border-gray-700 rounded-lg p-4 flex flex-col items-center justify-center min-h-[200px]">
+              <h3 class="text-lg font-semibold mb-4">Generated Style</h3>
+              <div id="styledImageContainer" class="w-full flex items-center justify-center">
+                <img id="styledImagePreview" class="max-h-48 max-w-full rounded shadow cursor-zoom-in object-contain" alt="Styled Preview" onclick="showImageModal(this.src)" />
+              </div>
+            </div>
+            
+            <!-- Right side - Action Selection -->
+            <div class="w-full md:w-1/2 bg-gray-800/30 border border-gray-700 rounded-lg p-4 flex flex-col">
+              <h3 class="text-lg font-semibold mb-4">Choose Action</h3>
+              
+              <!-- Action selection dropdown -->
+              <div class="mb-4">
+                <label for="actionSelect" class="form-label">Animation Type</label>
+                <select id="actionSelect" class="form-input">
+                  <option value="" disabled selected>Select action...</option>
+                  <!-- Options will be populated from ACTION_PROMPTS -->
+                </select>
+              </div>
+              
+              <!-- Action description will be shown here -->
+              <div id="actionDescription" class="text-sm text-gray-400 mb-4">
+                Select an action to see its description and frame count.
+              </div>
+              
+              <!-- Generate button -->
+              <button id="generateActionBtn" class="btn-primary w-full py-3 mt-auto" disabled>
+                Generate Action
+              </button>
+            </div>
+          </div>
+          
+          <!-- Animation Preview Section - Simplified -->
+          <div class="bg-gray-800/30 border border-gray-700 rounded-lg p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-4">Action Preview</h3>
+            
+            <!-- Preview Area -->
+            <div id="actionPreview" class="flex justify-center items-center min-h-[200px] bg-gray-900/50 rounded-lg mb-4 hidden">
+              <!-- Preview content will be inserted here -->
+            </div>
+            
+            <!-- Generated Frames Grid -->
+            <div id="actionFramesContainer" class="mt-4">
+              <!-- Frame grid will be inserted here -->
+            </div>
+          </div>
+        </section>
+      </main>
+      
+      <!-- Footer -->
+      <footer class="text-center text-sm text-gray-500 mt-16 pb-8">
+        Built with ❤️ &nbsp;·&nbsp; <a href="https://github.com/your-handle/spritesO3" class="underline hover:text-gray-300">GitHub</a>
+      </footer>
+    </div>
+    
+    <!-- Modal for image preview -->
+    <div id="imageModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center hidden">
+      <div class="relative bg-transparent max-w-3xl p-4">
+        <img id="modalImage" class="max-w-full max-h-[80vh]" alt="Preview" />
+        <button id="closeModal" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-gray-800/50 text-white hover:bg-gray-700">×</button>
+      </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="module" src="js/state.js"></script>
+    <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/ui.js"></script>
+    <script type="module" src="js/wizard.js"></script>
+    <script>
+      // Basic event handlers for modal and API key
+      document.addEventListener('DOMContentLoaded', function() {
+        // Set up modal close functionality
+        const modal = document.getElementById('imageModal');
+        const closeBtn = document.getElementById('closeModal');
+        
+        if (closeBtn && modal) {
+          closeBtn.addEventListener('click', function() {
+            modal.classList.add('hidden');
+          });
+          
+          modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+              modal.classList.add('hidden');
+            }
+          });
+        }
+        
+        // Set up API key save functionality
+        const apiKey = document.getElementById('apiKey');
+        if (apiKey) {
+          apiKey.addEventListener('input', function() {
+            localStorage.setItem('openai_api_key', this.value);
+          });
+        }
+        
+        // Set up file choose button
+        const chooseFileBtn = document.getElementById('chooseFileBtn');
+        const imageUpload = document.getElementById('imageUpload');
+        
+        if (chooseFileBtn && imageUpload) {
+          chooseFileBtn.addEventListener('click', function() {
+            imageUpload.click();
+          });
+        }
+      });
+    </script>
+  </body>
+</html> 
