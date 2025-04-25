@@ -86,6 +86,10 @@ SpriteForge is a web application that transforms regular photos into game-ready 
 
 5. Open your browser to http://localhost:8080
 
+### Live Demo
+
+Try out SpriteForge directly in your browser: [SpriteForge Demo](https://marcelontime.github.io/spriteforge/?step=1)
+
 ## 🎮 How to Use
 
 1. **Enter your OpenAI API key** (required for image generation)
