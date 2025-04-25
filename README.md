@@ -40,6 +40,19 @@ SpriteForge is a web application that transforms regular photos into game-ready 
   <p><em>Example sprite sheet generated with SpriteForge</em></p>
 </div>
 
+## 📸 Screenshots
+
+<div align="center">
+  <img src="./media/screenshot1.png" alt="SpriteForge - Upload Screen" width="800px" />
+  <p><em>Upload your image and select style preferences</em></p>
+  
+  <img src="./media/screenshot2.png" alt="SpriteForge - Style Selection" width="800px" />
+  <p><em>Choose from multiple generated game styles</em></p>
+  
+  <img src="./media/screenshot3.png" alt="SpriteForge - Animation Preview" width="800px" />
+  <p><em>Preview and customize your animated sprite frames</em></p>
+</div>
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -52,7 +65,7 @@ SpriteForge is a web application that transforms regular photos into game-ready 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/spriteforge.git
+   git clone https://github.com/marcelontime/spriteforge.git
    cd spriteforge
    ```
 
